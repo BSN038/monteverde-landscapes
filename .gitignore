@@ -1,0 +1,12 @@
+
+# Build output
+.next/
+
+# Dependencies
+node_modules/
+
+# Env files
+.env.local
+
+# Turbopack/Next cache
+.next/cache/

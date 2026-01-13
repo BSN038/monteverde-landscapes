@@ -13,10 +13,12 @@ export default function MarketingLayout({
   children: ReactNode;
 }) {
   return (
-    <>
-      <Navbar />
-      <main>{children}</main>
-      <Footer />
-    </>
+    <div className="page-frame">
+      <div className="page-frame-inner">
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </div>
+    </div>
   );
 }

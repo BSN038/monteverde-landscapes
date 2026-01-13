@@ -95,6 +95,12 @@ button {
   cursor: pointer;
 }
 
+h1 {
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 /* -----------------------------
    Utility Helpers
 ------------------------------ */
@@ -105,6 +111,7 @@ button {
   margin-left: auto;
   margin-right: auto;
 }
+
 /* -----------------------------
    Page Frame Layout (Paper Effect)
 ------------------------------ */
@@ -135,6 +142,7 @@ button {
   pointer-events: none;
   border-radius: inherit;
 }
+
 /* -----------------------------
    Pine Watermark (CSS Only)
 ------------------------------ */
@@ -145,7 +153,10 @@ button {
   inset: 0;
   background-image:
     linear-gradient(135deg,
-      rgba(47, 93, 58, 0.06) 25%,
+      rgba(90,
+        95,
+        92,
+        0.08) 25%,
       transparent 25%,
       transparent 50%,
       rgba(47, 93, 58, 0.06) 50%,
@@ -157,16 +168,21 @@ button {
   pointer-events: none;
   border-radius: inherit;
 }
+
 /* -----------------------------
    Navbar – Signature Buttons
 ------------------------------ */
 
 .nav-link {
-  padding: 0.5rem 1.25rem;
+  padding: 0.6rem 1.35rem;
+  /* slightly bigger click area */
   border-radius: 999px;
   background-color: transparent;
   color: var(--color-primary);
-  font-weight: 500;
+  font-size: 1.4rem;
+  /* ← THIS increases text size */
+  font-weight: 700;
+  /* ← THIS makes it thicker (not extreme) */
   letter-spacing: 0.04em;
   transition: all var(--transition-base);
 }
@@ -179,4 +195,191 @@ button {
 .nav-link-active {
   background-color: var(--color-primary);
   color: var(--color-background);
+}
+
+/* -----------------------------
+   Navbar – Editorial Line + Micro Interaction
+------------------------------ */
+
+.navbar-shell {
+  border-bottom: 1px solid rgba(47, 93, 58, 0.18);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.nav-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+  opacity: 0.6;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-link-active::after {
+  transform: scaleX(1);
+  opacity: 0.9;
+}
+
+.navbar-shell {
+  width: 100%;
+}
+
+.navbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.brand {
+  flex: 0 0 auto;
+}
+
+.brand-link {
+  display: block;
+}
+
+.brand-logo {
+  width: clamp(72px, 12vw, 140px);
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.navbar-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+
+}
+
+.nav-list {
+  display: flex;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* -----------------------------
+   Editorial Pine Watermark (Large)
+------------------------------ */
+.page-frame-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/brand/logo-round.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 520px;
+  opacity: 0.045;
+  filter: grayscale(1) contrast(1.1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure watermarks render inside the paper without being hidden */
+.page-frame-inner {
+  position: relative;
+  isolation: isolate;
+}
+
+.page-frame-inner::before,
+.page-frame-inner::after {
+  z-index: 0;
+}
+
+.page-frame-inner>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   Navbar Responsive Fix
+   Goal: On small screens, center a large circular logo first,
+   then center all nav "snaps" underneath, and keep layout stable.
+   ========================================================= */
+
+/* Mobile / small screens */
+@media (max-width: 768px) {
+  .navbar-row {
+    /* Stack logo first, then nav links below */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 1.25rem 0;
+  }
+
+  .brand {
+    /* Ensure the logo stays centered on its own row */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .brand-link {
+    display: flex;
+    justify-content: center;
+  }
+
+  .brand-logo {
+    /* Make the circle visibly larger at the top */
+    width: clamp(140px, 42vw, 220px);
+  }
+
+  .navbar-nav {
+    /* Full width so the pills can center properly */
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-list {
+    /* Center all "snaps" under the circle */
+    width: 100%;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+
+  .nav-link {
+    /* Slightly smaller on mobile to avoid overflow while keeping premium weight */
+    font-size: 1.15rem;
+    padding: 0.6rem 1.15rem;
+  }
+}
+
+/* Extra small screens (tighten spacing if needed) */
+@media (max-width: 420px) {
+  .brand-logo {
+    width: clamp(240px, 80vw, 400px);
+  }
+
+  .nav-list {
+    gap: 0.65rem;
+  }
+
+  .nav-link {
+    font-size: 1.05rem;
+    padding: 0.55rem 1.05rem;
+  }
 }
