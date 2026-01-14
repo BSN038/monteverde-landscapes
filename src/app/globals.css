@@ -383,3 +383,37 @@ h1 {
     padding: 0.55rem 1.05rem;
   }
 }
+
+/* =========================================================
+   Services – Card Buttons (Global)
+   Notes:
+   - CSS-only hover for Server Components (no JS needed)
+   - Mobile-first sizing to prevent cramped cards
+   ========================================================= */
+
+.service-card-button {
+  background: #eef3e6;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  /* ✅ vertical spacing between cards */
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.service-card-button:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(47, 93, 58, 0.22);
+}
+
+/* Mobile tuning */
+@media (max-width: 420px) {
+  .service-card-button {
+    padding: 1.25rem;
+    /* tighter padding on small screens */
+    border-radius: 14px;
+    /* slightly smaller radius for narrow devices */
+  }
+}
