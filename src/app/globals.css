@@ -198,6 +198,59 @@ h1 {
 }
 
 /* -----------------------------
+   Buttons – Match Navbar Pills
+------------------------------ */
+.pill-button {
+  padding: 0.6rem 1.35rem;
+  border-radius: 999px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pill-button:hover {
+  filter: brightness(0.95);
+}
+
+.pill-button:active {
+  transform: scale(0.99);
+  filter: brightness(0.9);
+}
+
+/* Disabled state that still looks like a button */
+.pill-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+/* -----------------------------
+   Reviews – Rating Title (Global)
+------------------------------ */
+.rating-title {
+  color: var(--color-primary);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  font-size: 1.95rem;
+  /* ~text-4xl */
+  margin: 0;
+}
+
+/* Optional: match spacing/look on small screens */
+@media (max-width: 640px) {
+  .rating-title {
+    font-size: 2rem;
+  }
+}
+
+/* -----------------------------
    Navbar – Editorial Line + Micro Interaction
 ------------------------------ */
 
