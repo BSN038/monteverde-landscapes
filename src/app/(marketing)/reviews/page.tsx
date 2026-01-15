@@ -45,7 +45,6 @@ export default function ReviewsPage() {
     else if (!isValidEmail(form.email)) e.email = "Email looks incorrect. Please check it.";
     if (!form.message.trim()) e.message = "Please write a short review.";
 
-    // rating is always set via select
     return e;
   }, [form.fullName, form.email, form.message]);
 
@@ -107,9 +106,9 @@ export default function ReviewsPage() {
         </p>
       </header>
 
-      <section className="rounded-3xl border border-neutral-200 bg-[#F7F2E9] p-6 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
         {submitState.status === "success" ? (
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
+          <div className="rounded-3xl border border-emerald-700 bg-white p-10">
             <h2 className="text-base font-semibold text-emerald-950">Thank you for your review</h2>
             <p className="mt-1 text-sm text-emerald-900/80">
               Your review has been submitted and will be published after moderation.
@@ -117,16 +116,21 @@ export default function ReviewsPage() {
           </div>
         ) : (
           <>
-            <div className="mb-6 rounded-2xl border border-emerald-200/60 bg-white/70 p-4 text-sm text-neutral-800">
-              <div className="font-medium text-neutral-900">Quick note</div>
-              <div className="mt-1 text-neutral-700">
-                We read every submission. Reviews are published after a quick check to prevent spam.
-              </div>
-            </div>
+              <div className="mb-6 rounded-2xl border border-emerald-200/60 bg-white/70 p-4">
+                <h2 className="text-lg font-semibold tracking-tight text-emerald-900">
+                  Quick note
+                </h2>
 
-            <form onSubmit={onSubmit} className="space-y-10">
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <p className="mt-1 text-sm text-neutral-700">
+                  We read every submission. Reviews are published after a quick check to prevent spam.
+                </p>
+              </div>
+
+            {/* Key change: spacing + rows are now label-left / input-right on sm+ */}
+            <form onSubmit={onSubmit} className="space-y-8">
+              <div className="space-y-6">
                 <InputField
+                  id="review-fullName"
                   label="Full name"
                   placeholder="e.g. Maria Gonzalez"
                   value={form.fullName}
@@ -137,6 +141,7 @@ export default function ReviewsPage() {
                 />
 
                 <InputField
+                  id="review-email"
                   label="Email"
                   placeholder="e.g. maria@email.com"
                   value={form.email}
@@ -148,49 +153,54 @@ export default function ReviewsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div>
-                    <h2 className="rating-title">Rating</h2>
+              {/* Rating + Location row (two columns on sm+) */}
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:items-start">
+                <div className="sm:pt-1">
+                    <h2 className="text-lg font-semibold tracking-tight text-emerald-900">
+                      Rating
+                    </h2>
 
-                    <div className="flex items-center gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => update("rating", star as 1 | 2 | 3 | 4 | 5)}
-                          className="text-[52px] leading-none transition hover:scale-110"
-                          aria-label={`${star} star`}
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => update("rating", star as 1 | 2 | 3 | 4 | 5)}
+                        className="leading-none transition hover:scale-110"
+                        aria-label={`${star} star`}
+                      >
+                        <span
+                          style={{
+                            fontSize: "32px",
+                            lineHeight: "1",
+                            color: star <= form.rating ? "#FACC15" : "#D1D5DB",
+                          }}
                         >
-                          <span
-                            style={{
-                              fontSize: "32px",
-                              lineHeight: "1",
-                              color: star <= form.rating ? "#FACC15" : "#D1D5DB",
-                            }}
-                          >
-                            ★
-                          </span>
-
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="mt-2 text-xs text-neutral-700">
-                      Click to rate — 5 stars is excellent
-                    </div>
+                          ★
+                        </span>
+                      </button>
+                    ))}
                   </div>
 
+                  <div className="mt-2 text-xs text-neutral-700">
+                    Click to rate — 5 stars is excellent
+                  </div>
+                </div>
 
-                <InputField
-                  label="Location (optional)"
-                  placeholder="e.g. Didsbury, Manchester"
-                  value={form.location || ""}
-                  onChange={(v) => update("location", v)}
-                  onBlur={() => touch("location")}
-                />
+                <div className="sm:pt-2">
+                  <InputField
+                    id="review-location"
+                    label="Location (optional)"
+                    placeholder="e.g. Didsbury, Manchester"
+                    value={form.location || ""}
+                    onChange={(v) => update("location", v)}
+                    onBlur={() => touch("location")}
+                  />
+                </div>
               </div>
 
               <InputField
+                id="review-projectType"
                 label="Project type (optional)"
                 placeholder="e.g. Patio, Turf, Planting"
                 value={form.projectType || ""}
@@ -199,6 +209,7 @@ export default function ReviewsPage() {
               />
 
               <TextAreaField
+                id="review-message"
                 label="Your review"
                 placeholder="Tell us about your experience — what you loved, what we built, how the process felt…"
                 value={form.message}
@@ -215,13 +226,13 @@ export default function ReviewsPage() {
               )}
 
               <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={!canSubmit || submitState.status === "submitting"}
-                    className="pill-button w-full sm:w-auto"
-                  >
-                    {submitState.status === "submitting" ? "Submitting..." : "Submit review"}
-                  </button>
+                <button
+                  type="submit"
+                  disabled={!canSubmit || submitState.status === "submitting"}
+                  className="pill-button w-full sm:w-auto"
+                >
+                  {submitState.status === "submitting" ? "Submitting..." : "Submit review"}
+                </button>
 
                 <p className="mt-3 text-xs text-neutral-700">
                   By submitting, you agree we can contact you if we need to verify details.
@@ -236,6 +247,7 @@ export default function ReviewsPage() {
 }
 
 function InputField(props: {
+  id: string;
   label: string;
   placeholder: string;
   value: string;
@@ -245,66 +257,50 @@ function InputField(props: {
   required?: boolean;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 }) {
-  const { label, placeholder, value, onChange, onBlur, error, required, inputMode } = props;
+  const { id, label, placeholder, value, onChange, onBlur, error, required, inputMode } = props;
 
   return (
-    <label className="block">
-      <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-900">
-        <span>{label}</span>
-        {required ? <span className="text-xs text-neutral-600">(required)</span> : null}
+    <div
+      className={[
+        "grid gap-2",
+        // label left / input right on sm+
+        "grid-cols-[220px,1fr]",
+        "items-center",
+
+      ].join(" ")}
+    >
+      <div className="text-sm font-medium text-neutral-900 sm:pt-1">
+        <label htmlFor={id} className="inline-flex items-center gap-2">
+          <span>{label}</span>
+          {required ? <span className="text-xs text-neutral-600">(required)</span> : null}
+        </label>
       </div>
 
-      <input
-        className={[
-          "w-full rounded-full border bg-[#EAF3E1] px-5 py-3 text-sm text-neutral-900 outline-none transition",
-          "placeholder:text-neutral-500",
-          error
-            ? "border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100"
-            : "border-neutral-300 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100",
-        ].join(" ")}
-        value={value}
-        placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
-        inputMode={inputMode}
-      />
+      <div>
+        <input
+          id={id}
+          className={[
+            "w-full rounded-full border bg-[#EAF3E1] px-5 py-3 text-sm text-neutral-900 outline-none transition",
+            "placeholder:text-neutral-500",
+            error
+              ? "border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100"
+              : "border-neutral-300 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100",
+          ].join(" ")}
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          inputMode={inputMode}
+        />
 
-      {error ? <div className="mt-2 text-xs text-red-700">{error}</div> : null}
-    </label>
-  );
-}
-
-function SelectField<T extends string | number>(props: {
-  label: string;
-  value: T;
-  onChange: (v: T) => void;
-  options: { value: T; label: string }[];
-  hint?: string;
-}) {
-  const { label, value, onChange, options, hint } = props;
-
-  return (
-    <label className="block">
-      <div className="mb-2 text-sm font-medium text-neutral-900">{label}</div>
-
-      <select
-        className="w-full rounded-3xl border-0 bg-[#E6F0D8] px-6 py-4 text-base text-neutral-900 shadow-inner outline-none transition placeholder:text-neutral-500 focus:bg-[#EDF6E3] focus:ring-4 focus:ring-emerald-200"
-        value={value as any}
-        onChange={(e) => onChange((typeof value === "number" ? Number(e.target.value) : e.target.value) as T)}
-      >
-        {options.map((o) => (
-          <option key={String(o.value)} value={o.value as any}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-
-      {hint ? <div className="mt-2 text-xs text-neutral-700">{hint}</div> : null}
-    </label>
+        {error ? <div className="mt-2 text-xs text-red-700">{error}</div> : null}
+      </div>
+    </div>
   );
 }
 
 function TextAreaField(props: {
+  id: string;
   label: string;
   placeholder: string;
   value: string;
@@ -313,31 +309,37 @@ function TextAreaField(props: {
   error?: string;
   required?: boolean;
 }) {
-  const { label, placeholder, value, onChange, onBlur, error, required } = props;
+  const { id, label, placeholder, value, onChange, onBlur, error, required } = props;
 
   return (
-    <label className="block">
-      <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-900">
-        <span>{label}</span>
-        {required ? <span className="text-xs text-neutral-600">(required)</span> : null}
+    <div className="grid gap-2 sm:grid-cols-[220px,1fr] sm:items-start">
+      <div className="text-sm font-medium text-neutral-900 sm:pt-3">
+        <label htmlFor={id} className="inline-flex items-center gap-2">
+          <span>{label}</span>
+          {required ? (
+            <span className="text-xs text-neutral-600">(required)</span>
+          ) : null}
+        </label>
       </div>
 
-      <textarea
-        className={[
-          "min-h-[150px] w-full resize-y rounded-3xl border bg-[#EAF3E1] px-5 py-4 text-sm text-neutral-900 outline-none transition",
-          "placeholder:text-neutral-400",
-          error
+      <div>
+        <textarea
+          id={id}
+          className={[
+            "min-h-[260px] w-full resize-y rounded-3xl border bg-[#EAF3E1] px-5 py-4 text-sm text-neutral-900 outline-none transition",
+            "placeholder:text-neutral-400",
+            error
+              ? "border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100"
+              : "border-neutral-300 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100",
+          ].join(" ")}
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+        />
 
-            ? "border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100"
-            : "border-neutral-300 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100",
-        ].join(" ")}
-        value={value}
-        placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
-      />
-
-      {error ? <div className="mt-2 text-xs text-red-700">{error}</div> : null}
-    </label>
+        {error ? <div className="mt-2 text-xs text-red-700">{error}</div> : null}
+      </div>
+    </div>
   );
 }

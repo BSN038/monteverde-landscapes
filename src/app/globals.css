@@ -7,6 +7,9 @@
 /* -----------------------------
    CSS Reset / Base
 ------------------------------ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 *,
 *::before,
 *::after {
@@ -311,7 +314,7 @@ h1 {
 }
 
 .brand-logo {
-  width: clamp(72px, 12vw, 140px);
+  width: clamp(160px, 22vw, 300px);
   height: auto;
   display: block;
   flex-shrink: 0;
