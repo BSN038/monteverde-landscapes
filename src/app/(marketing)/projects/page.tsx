@@ -157,7 +157,7 @@ export default function ProjectsPage() {
           <p style={{ marginTop: "0.75rem" }}>
             Want a similar outcome on your property?{" "}
             <Link
-              href="/contact"
+              href="/quote"
               style={{ color: "var(--color-primary)", fontWeight: 700 }}
             >
               Request a quote

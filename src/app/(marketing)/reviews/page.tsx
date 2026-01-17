@@ -2,7 +2,7 @@
 
 // src/app/(marketing)/reviews/page.tsx
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReviewCreateInput } from "@/types/review";
 
 type SubmitState =
@@ -12,6 +12,15 @@ type SubmitState =
   | { status: "error"; message: string };
 
 type FieldErrors = Partial<Record<keyof ReviewCreateInput, string>>;
+type ApprovedReview = {
+  id: string;
+  fullName: string;
+  rating: number;
+  message: string;
+  location?: string | null;
+  projectType?: string | null;
+  createdAt: string;
+};
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -28,6 +37,10 @@ export default function ReviewsPage() {
 
   const [touched, setTouched] = useState<Partial<Record<keyof ReviewCreateInput, boolean>>>({});
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
+  const [approvedReviews, setApprovedReviews] = useState<ApprovedReview[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState<boolean>(true);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
+
 
   function update<K extends keyof ReviewCreateInput>(key: K, value: ReviewCreateInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -47,6 +60,41 @@ export default function ReviewsPage() {
 
     return e;
   }, [form.fullName, form.email, form.message]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadApprovedReviews() {
+      setReviewsLoading(true);
+      setReviewsError(null);
+
+      try {
+        const res = await fetch("/api/review", { method: "GET" });
+        const data = (await res.json()) as {
+          ok?: boolean;
+          reviews?: ApprovedReview[];
+          error?: string;
+        };
+
+        if (!res.ok || !data.ok) {
+          if (!cancelled) setReviewsError(data.error || "Failed to load reviews.");
+          return;
+        }
+
+        if (!cancelled) setApprovedReviews(Array.isArray(data.reviews) ? data.reviews : []);
+      } catch {
+        if (!cancelled) setReviewsError("Network error while loading reviews.");
+      } finally {
+        if (!cancelled) setReviewsLoading(false);
+      }
+    }
+
+    void loadApprovedReviews();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const canSubmit = Object.keys(errors).length === 0;
 
@@ -91,6 +139,16 @@ export default function ReviewsPage() {
       }
 
       setSubmitState({ status: "success" });
+      setForm({
+        fullName: "",
+        email: "",
+        rating: 5,
+        message: "",
+        source: "website",
+      });
+
+      setTouched({});
+
     } catch {
       setSubmitState({ status: "error", message: "Network error. Please try again." });
     }
@@ -105,6 +163,53 @@ export default function ReviewsPage() {
           we’d love to hear your feedback — it helps other homeowners feel confident.
         </p>
       </header>
+
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold tracking-tight text-neutral-900">Published reviews</h2>
+
+        {reviewsLoading ? (
+          <p className="mt-2 text-sm text-neutral-700">Loading reviews…</p>
+        ) : reviewsError ? (
+          <div className="mt-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            {reviewsError}
+          </div>
+        ) : approvedReviews.length === 0 ? (
+          <p className="mt-2 text-sm text-neutral-700">No published reviews yet.</p>
+        ) : (
+          <ul className="mt-4 space-y-4">
+            {approvedReviews.map((r) => (
+              <li key={r.id} className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="text-sm font-semibold text-neutral-900">{r.fullName}</div>
+
+                  <div className="flex items-center gap-1" aria-label={`Rating: ${r.rating} out of 5`}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                        key={star}
+                        style={{
+                          fontSize: "18px",
+                          lineHeight: "1",
+                          color: star <= r.rating ? "#FACC15" : "#D1D5DB",
+                        }}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {(r.location || r.projectType) && (
+                  <div className="mt-1 text-xs text-neutral-600">
+                    {[r.location, r.projectType].filter(Boolean).join(" • ")}
+                  </div>
+                )}
+
+                <p className="mt-3 text-sm leading-6 text-neutral-800">{r.message}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
         {submitState.status === "success" ? (

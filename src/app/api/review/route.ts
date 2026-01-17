@@ -93,3 +93,47 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid JSON body" }, { status: 400 });
   }
 }
+
+export async function GET() {
+  const supabaseUrl = process.env.SUPABASE_URL;
+
+  // Prefer anon key so RLS policies are enforced server-side the same way as the public.
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
+  // Fallback to service role if anon key is not available (still hard-filter to approved).
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  const supabaseKey = supabaseAnonKey || supabaseServiceRoleKey;
+
+  if (!supabaseUrl || !supabaseKey) {
+    return NextResponse.json(
+      { ok: false, error: "Supabase env vars missing (SUPABASE_URL + SUPABASE_ANON_KEY or SUPABASE_SERVICE_ROLE_KEY)" },
+      { status: 500 }
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("id, full_name, rating, message, location, project_type, created_at")
+    .eq("status", "approved")
+    .order("created_at", { ascending: false })
+    .limit(20);
+
+  if (error) {
+    return NextResponse.json({ ok: false, error: "Failed to load reviews" }, { status: 500 });
+  }
+
+  const reviews = (data ?? []).map((r) => ({
+    id: r.id,
+    fullName: r.full_name,
+    rating: r.rating,
+    message: r.message,
+    location: r.location,
+    projectType: r.project_type,
+    createdAt: r.created_at,
+  }));
+
+  return NextResponse.json({ ok: true, reviews }, { status: 200 });
+}
