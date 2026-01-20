@@ -128,22 +128,9 @@ h1 {
 .page-frame-inner {
   min-height: calc(100vh - var(--space-2xl));
   background-color: var(--color-background);
-  border: 2px solid var(--color-primary);
-  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--space-2xl);
   position: relative;
-}
-
-/* Subtle paper texture overlay */
-.page-frame-inner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("/textures/paper-noise.png");
-  opacity: 0.04;
-  pointer-events: none;
-  border-radius: inherit;
 }
 
 /* -----------------------------
@@ -337,23 +324,6 @@ h1 {
   justify-content: flex-end;
 }
 
-/* -----------------------------
-   Editorial Pine Watermark (Large)
------------------------------- */
-.page-frame-inner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("/brand/logo-round.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 520px;
-  opacity: 0.045;
-  filter: grayscale(1) contrast(1.1);
-  pointer-events: none;
-  z-index: 0;
-}
-
 /* Ensure watermarks render inside the paper without being hidden */
 .page-frame-inner {
   position: relative;
@@ -471,5 +441,22 @@ h1 {
     /* tighter padding on small screens */
     border-radius: 14px;
     /* slightly smaller radius for narrow devices */
+  }
+}
+/* =========================================================
+   Navbar Brand Mark Override (FIX)
+   Keeps legacy .brand-logo styles intact everywhere else.
+   ========================================================= */
+/* Navbar logo: force small brand mark without affecting the rest of the site */
+.navbar-shell .brand-logo {
+  width: 34px !important;
+  height: 34px !important;
+  object-fit: contain;
+}
+
+/* Services coverage grid: stack on small screens */
+@media (max-width: 900px) {
+  .services-coverage-grid {
+    grid-template-columns: 1fr !important;
   }
 }

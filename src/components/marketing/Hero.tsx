@@ -20,13 +20,14 @@ export default function Hero() {
             display: "inline-flex",
             alignItems: "center",
             gap: "0.5rem",
-            padding: "0.35rem 0.65rem",
+            padding: "0.45rem 0.9rem",
             borderRadius: "999px",
-            border: "1px solid var(--color-border)",
-            background: "var(--color-surface)",
-            color: "var(--color-text-secondary)",
+            background: "rgba(22, 64, 48, 0.95)", // verde oscuro corporativo
+            color: "#efe4cc",                    // beige intenso
             fontSize: "0.9rem",
-            boxShadow: "var(--shadow-sm)",
+            fontWeight: 600,
+            letterSpacing: "0.01em",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
           }}
         >
           <span
@@ -35,10 +36,11 @@ export default function Hero() {
               width: 8,
               height: 8,
               borderRadius: 999,
-              background: "var(--color-primary-muted)",
+              background: "#efe4cc", // beige a juego
               display: "inline-block",
             }}
           />
+
           Premium outdoor design & build
         </p>
 

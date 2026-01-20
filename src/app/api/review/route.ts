@@ -1,7 +1,7 @@
-// src/app/api/review/route.ts
 import { NextResponse } from "next/server";
 import type { ReviewCreateInput } from "@/types/review";
 import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -15,8 +15,12 @@ function isValidRating(value: unknown): value is 1 | 2 | 3 | 4 | 5 {
   return value === 1 || value === 2 || value === 3 || value === 4 || value === 5;
 }
 
-// NOTE: Persistence + moderation workflow will be wired in later (DB/dashboard).
-// For now we accept submissions and keep them "pending" conceptually.
+const resend = new Resend(process.env.RESEND_API_KEY);
+const NOTIFY_EMAIL =
+  process.env.NOTIFY_EMAIL || "info@monteverdelandscapers.com";
+const FROM_EMAIL =
+  process.env.FROM_EMAIL || "Monteverde <no-reply@monteverdelandscapers.com>";
+
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as Partial<ReviewCreateInput>;
@@ -29,15 +33,24 @@ export async function POST(req: Request) {
     }
 
     if (!isNonEmptyString(body.email)) {
-      return NextResponse.json({ ok: false, error: "email is required" }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, error: "email is required" },
+        { status: 400 }
+      );
     }
 
     if (!isValidEmail(body.email)) {
-      return NextResponse.json({ ok: false, error: "email is invalid" }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, error: "email is invalid" },
+        { status: 400 }
+      );
     }
 
     if (!isValidRating(body.rating)) {
-      return NextResponse.json({ ok: false, error: "rating must be 1-5" }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, error: "rating must be 1-5" },
+        { status: 400 }
+      );
     }
 
     if (!isNonEmptyString(body.message)) {
@@ -57,19 +70,23 @@ export async function POST(req: Request) {
       source: "website",
     };
 
-    // Gate 8: Persist review as "pending" in Supabase for moderation.
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !supabaseServiceRoleKey) {
       return NextResponse.json(
-        { ok: false, error: "Supabase env vars missing (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)" },
+        {
+          ok: false,
+          error:
+            "Supabase env vars missing (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)",
+        },
         { status: 500 }
       );
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+    // 1) Guardar review como pending
     const { error } = await supabase.from("reviews").insert({
       full_name: review.fullName,
       email: review.email,
@@ -88,26 +105,53 @@ export async function POST(req: Request) {
       );
     }
 
+    // 2) Email de moderación
+    if (process.env.RESEND_API_KEY) {
+      try {
+        await resend.emails.send({
+          from: FROM_EMAIL,
+          to: [NOTIFY_EMAIL],
+          replyTo: review.email,
+          subject: `New review submitted (pending) — ${review.fullName}`,
+          html: `
+            <h2>New review submitted (pending)</h2>
+            <p><b>Name:</b> ${review.fullName}</p>
+            <p><b>Email:</b> ${review.email}</p>
+            <p><b>Rating:</b> ${review.rating} / 5</p>
+            ${review.location ? `<p><b>Location:</b> ${review.location}</p>` : ""}
+            ${review.projectType ? `<p><b>Project Type:</b> ${review.projectType}</p>` : ""}
+            <p><b>Message:</b></p>
+            <pre>${review.message}</pre>
+          `,
+        });
+      } catch (e) {
+        console.error("Resend send error (review):", e);
+      }
+    }
+
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: "Invalid JSON body" },
+      { status: 400 }
+    );
   }
 }
 
 export async function GET() {
   const supabaseUrl = process.env.SUPABASE_URL;
-
-  // Prefer anon key so RLS policies are enforced server-side the same way as the public.
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-
-  // Fallback to service role if anon key is not available (still hard-filter to approved).
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   const supabaseKey = supabaseAnonKey || supabaseServiceRoleKey;
 
   if (!supabaseUrl || !supabaseKey) {
     return NextResponse.json(
-      { ok: false, error: "Supabase env vars missing (SUPABASE_URL + SUPABASE_ANON_KEY or SUPABASE_SERVICE_ROLE_KEY)" },
+      {
+        ok: false,
+        error:
+          "Supabase env vars missing (SUPABASE_URL + SUPABASE_ANON_KEY or SUPABASE_SERVICE_ROLE_KEY)",
+      },
       { status: 500 }
     );
   }
@@ -122,7 +166,10 @@ export async function GET() {
     .limit(20);
 
   if (error) {
-    return NextResponse.json({ ok: false, error: "Failed to load reviews" }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "Failed to load reviews" },
+      { status: 500 }
+    );
   }
 
   const reviews = (data ?? []).map((r) => ({

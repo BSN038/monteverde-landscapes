@@ -20,9 +20,8 @@ type Step = {
 
 const PROCESS_PAGE = {
   heading: "Our Process",
+  // Kept for internal use if needed later, but the top copy is now handled in the green panel.
   slogan: "Premium landscaping, delivered with clarity and care.",
-  intro:
-    "We keep projects simple and professional: clear scope, consistent communication, and clean execution. Here’s exactly how we work—from the first message to the final walkthrough—so you always know what’s next.",
 };
 
 const TRUST_CARDS: InfoCard[] = [
@@ -121,37 +120,90 @@ const STEPS: Step[] = [
   },
 ];
 
-function SectionHeading({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <header style={{ maxWidth: 760, marginBottom: "2.5rem" }}>
-      <h1 style={{ margin: 0 }}>{title}</h1>
-      <p
-        style={{
-          marginTop: "1rem",
-          marginBottom: 0,
-          color: "var(--color-text-secondary)",
-          fontWeight: 600,
-        }}
-      >
-        {subtitle}
-      </p>
-    </header>
-  );
-}
-
 export default function ProcessPage() {
   return (
     <section>
       <div className="container" style={{ padding: "4rem 0" }}>
-        {/* Page Heading (match Services structure) */}
-        <SectionHeading title={PROCESS_PAGE.heading} subtitle={PROCESS_PAGE.slogan} />
-        <p style={{ marginTop: "-1.25rem", maxWidth: 760 }}>{PROCESS_PAGE.intro}</p>
+        {/* Page Heading (NOW matches Projects: dark-green rounded panel + beige text + quote link) */}
+        <header style={{ width: "100%", marginBottom: "2rem" }}>
+          <div
+            style={{
+              background: "var(--color-primary)",
+              borderRadius: "18px",
+              padding: "1.9rem 2rem",
+              boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
+              width: "100%",
+            }}
+          >
+
+            <h1 style={{ margin: 0, color: "#F1E7D3" }}>{PROCESS_PAGE.heading}</h1>
+
+            <p
+              style={{
+                marginTop: "0.9rem",
+                marginBottom: 0,
+                color: "#F1E7D3",
+                opacity: 0.92,
+                fontWeight: 600,
+              }}
+            >
+              Every project at Monteverde Landscaping is carefully planned and carried out to ensure
+              quality results that last.
+            </p>
+
+            <div style={{ marginTop: "1rem", color: "#F1E7D3", opacity: 0.92 }}>
+              <p style={{ marginTop: 0 }}>
+                We start by understanding your space, your ideas, and how you want to use your
+                garden. From there, we plan the layout, materials, and preparation needed to deliver
+                a clean, durable finish.
+              </p>
+
+              <p style={{ marginTop: "0.9rem" }}>
+                Groundwork is never rushed. Correct excavation, solid foundations, drainage, and
+                levels are all handled before any final surface is installed. This ensures patios,
+                resin, turf, and hard landscaping remain strong and visually consistent over time.
+              </p>
+
+              <p style={{ marginTop: "0.9rem" }}>
+                Throughout the project, we work methodically and keep the site organised, using
+                professional equipment and proven techniques. Once the installation is complete, we
+                carry out final checks and leave the area clean and ready to use.
+              </p>
+
+              <p style={{ marginTop: "0.9rem", marginBottom: 0 }}>
+                Our approach is simple: proper preparation, quality materials, and honest
+                workmanship from start to finish.{" "}
+                <Link
+                  href="/quote"
+                  style={{
+                    color: "#F1E7D3",
+                    fontWeight: 800,
+                    textDecoration: "underline",
+                    textUnderlineOffset: "3px",
+                  }}
+                >
+                  Request a quote
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+        </header>
+
+        {/* Hero image (ideal placement: immediately under the green panel, before the trust cards) */}
+        <div style={{ marginTop: "1.75rem", marginBottom: "2.25rem" }}>
+          <img
+            src="/images/projects/process-hero.png"
+            alt="Monteverde Landscaping process overview"
+            style={{
+              width: "100%",
+              height: "auto",
+              borderRadius: "18px",
+              display: "block",
+              boxShadow: "0 18px 40px rgba(0,0,0,0.12)",
+            }}
+          />
+        </div>
 
         {/* Top trust cards (same “green boxes” pattern as Services cards) */}
         <div className="services-grid" style={{ marginTop: "2rem", rowGap: "1.5rem" }}>

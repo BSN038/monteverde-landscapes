@@ -3,6 +3,7 @@
 // src/app/(marketing)/contact/page.tsx
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 type ContactForm = {
   name: string;
@@ -100,13 +101,41 @@ export default function ContactPage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-6 py-12">
-      <header className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Contact</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700">
-          Tell us what you’re looking for and we’ll get back to you. If you’d rather, you can also
-          request a quote from the Quote page.
-        </p>
+      <header className="mb-10" style={{ width: "100%" }}>
+        <div
+          style={{
+            background: "var(--color-primary)",
+            borderRadius: "18px",
+            padding: "1.9rem 2rem",
+            boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
+            width: "100%",
+          }}
+        >
+          <h1 style={{ margin: 0, color: "#F1E7D3" }}>Contact</h1>
+
+          <p style={{ marginTop: "0.9rem", marginBottom: 0, color: "#F1E7D3", opacity: 0.92 }}>
+            Tell us what you’re planning and we’ll get back to you. If you already have measurements
+            or photos, mention it—details help us respond faster.
+          </p>
+
+          <p style={{ marginTop: "0.9rem", marginBottom: 0, color: "#F1E7D3", opacity: 0.92 }}>
+            Prefer a structured price estimate?{" "}
+            <Link
+              href="/quote"
+              style={{
+                color: "#F1E7D3",
+                fontWeight: 800,
+                textDecoration: "underline",
+                textUnderlineOffset: "3px",
+              }}
+            >
+              Request a quote
+            </Link>
+            .
+          </p>
+        </div>
       </header>
+
 
       <section className="rounded-3xl border border-neutral-200 bg-white p-10 shadow-md">
         {submitState.status === "success" ? (

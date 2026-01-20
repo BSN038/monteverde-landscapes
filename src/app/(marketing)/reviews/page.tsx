@@ -4,6 +4,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { ReviewCreateInput } from "@/types/review";
+import Link from "next/link";
 
 type SubmitState =
   | { status: "idle" }
@@ -40,7 +41,6 @@ export default function ReviewsPage() {
   const [approvedReviews, setApprovedReviews] = useState<ApprovedReview[]>([]);
   const [reviewsLoading, setReviewsLoading] = useState<boolean>(true);
   const [reviewsError, setReviewsError] = useState<string | null>(null);
-
 
   function update<K extends keyof ReviewCreateInput>(key: K, value: ReviewCreateInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -148,7 +148,6 @@ export default function ReviewsPage() {
       });
 
       setTouched({});
-
     } catch {
       setSubmitState({ status: "error", message: "Network error. Please try again." });
     }
@@ -156,12 +155,41 @@ export default function ReviewsPage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-6 py-12">
-      <header className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Reviews</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700">
-          Our website is new and we don’t have published reviews yet. If you’ve worked with us,
-          we’d love to hear your feedback — it helps other homeowners feel confident.
-        </p>
+      {/* Header panel (matches Projects/Process/Services pattern) */}
+      <header className="mb-10" style={{ width: "100%" }}>
+        <div
+          style={{
+            background: "var(--color-primary)",
+            borderRadius: "18px",
+            padding: "1.9rem 2rem",
+            boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
+            width: "100%",
+          }}
+        >
+          <h1 style={{ margin: 0, color: "#F1E7D3" }}>Reviews</h1>
+
+          <p style={{ marginTop: "0.9rem", marginBottom: 0, color: "#F1E7D3", opacity: 0.92 }}>
+            If you’ve worked with us, we’d really appreciate a short review. Every submission is
+            checked before it appears publicly — it helps keep things genuine and helps other
+            homeowners feel confident.
+          </p>
+
+          <p style={{ marginTop: "0.9rem", marginBottom: 0, color: "#F1E7D3", opacity: 0.92 }}>
+            Looking for pricing or advice first?{" "}
+            <Link
+              href="/quote"
+              style={{
+                color: "#F1E7D3",
+                fontWeight: 800,
+                textDecoration: "underline",
+                textUnderlineOffset: "3px",
+              }}
+            >
+              Request a quote
+            </Link>
+            .
+          </p>
+        </div>
       </header>
 
       <section className="mb-8">
@@ -221,15 +249,13 @@ export default function ReviewsPage() {
           </div>
         ) : (
           <>
-              <div className="mb-6 rounded-2xl border border-emerald-200/60 bg-white/70 p-4">
-                <h2 className="text-lg font-semibold tracking-tight text-emerald-900">
-                  Quick note
-                </h2>
+            <div className="mb-6 rounded-2xl border border-emerald-200/60 bg-white/70 p-4">
+              <h2 className="text-lg font-semibold tracking-tight text-emerald-900">Quick note</h2>
 
-                <p className="mt-1 text-sm text-neutral-700">
-                  We read every submission. Reviews are published after a quick check to prevent spam.
-                </p>
-              </div>
+              <p className="mt-1 text-sm text-neutral-700">
+                We read every submission. Reviews are published after a quick check to prevent spam.
+              </p>
+            </div>
 
             {/* Key change: spacing + rows are now label-left / input-right on sm+ */}
             <form onSubmit={onSubmit} className="space-y-8">
@@ -261,9 +287,7 @@ export default function ReviewsPage() {
               {/* Rating + Location row (two columns on sm+) */}
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:items-start">
                 <div className="sm:pt-1">
-                    <h2 className="text-lg font-semibold tracking-tight text-emerald-900">
-                      Rating
-                    </h2>
+                  <h2 className="text-lg font-semibold tracking-tight text-emerald-900">Rating</h2>
 
                   <div className="flex items-center gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -287,9 +311,7 @@ export default function ReviewsPage() {
                     ))}
                   </div>
 
-                  <div className="mt-2 text-xs text-neutral-700">
-                    Click to rate — 5 stars is excellent
-                  </div>
+                  <div className="mt-2 text-xs text-neutral-700">Click to rate — 5 stars is excellent</div>
                 </div>
 
                 <div className="sm:pt-2">
@@ -371,7 +393,6 @@ function InputField(props: {
         // label left / input right on sm+
         "grid-cols-[220px,1fr]",
         "items-center",
-
       ].join(" ")}
     >
       <div className="text-sm font-medium text-neutral-900 sm:pt-1">
@@ -421,9 +442,7 @@ function TextAreaField(props: {
       <div className="text-sm font-medium text-neutral-900 sm:pt-3">
         <label htmlFor={id} className="inline-flex items-center gap-2">
           <span>{label}</span>
-          {required ? (
-            <span className="text-xs text-neutral-600">(required)</span>
-          ) : null}
+          {required ? <span className="text-xs text-neutral-600">(required)</span> : null}
         </label>
       </div>
 

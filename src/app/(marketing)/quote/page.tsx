@@ -370,7 +370,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 function SuccessPanel() {
   return (
-    <div className="mx-auto max-w-xl rounded-xl border border-green-200 bg-green-50 p-6 text-center">
+    <div className="mx-auto max-w-xl rounded-xl border border-green-200 bg-green-50 p-6 text-centerf">
       <h2 className="text-base font-semibold text-green-900">Request received</h2>
       <p className="mt-1 text-sm text-green-800">
         Thanks — we’ll get back to you shortly.

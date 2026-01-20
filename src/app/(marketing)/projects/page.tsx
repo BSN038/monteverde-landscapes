@@ -19,151 +19,131 @@ type ProjectCard = {
 
 const PROJECTS: ProjectCard[] = [
   {
-    title: "Modern Courtyard Renewal",
-    subtitle: "Design + Build • Clean lines, year-round structure",
+    title: "Indian Sandstone Patio (Garswood)",
+    subtitle: "33sqm • Curved layout • Durable, natural finish",
     description:
-      "A crisp, low-maintenance courtyard that feels refined from day one—balanced planting, strong hardscape geometry, and lighting that elevates evenings.",
+      "A 33sqm Indian sandstone patio installed with smooth curves and careful groundwork to create a practical, durable outdoor space. The natural stone finish enhances the garden’s character while providing a clean, long-lasting seating area in Garswood.",
     highlights: [
-      "Architectural planting plan",
-      "Stone + gravel detailing",
-      "Low-maintenance palette",
+      "Full groundwork preparation",
+      "Curved edges for a softer layout",
+      "Natural stone for long-term durability",
     ],
-    imageSrc: "/images/projects/modern-courtyard.png",
-    imageAlt: "Modern courtyard landscape design with clean lines and architectural planting",
-  },
-  {
-    title: "Front Entry Transformation",
-    subtitle: "Curb Appeal • Instant impact from the street",
-    description:
-      "A welcoming approach that frames the home with layered greenery, seasonal interest, and a clear arrival moment—designed to look great in every season.",
-    highlights: [
-      "Entry framing + symmetry",
-      "Evergreen structure",
-      "Seasonal color rotation",
-    ],
-    imageSrc: "/images/projects/front-entry.png",
-    imageAlt: "Front entry landscaping with clean walkway and layered planting",
-  },
-  {
-    title: "Outdoor Living Terrace",
-    subtitle: "Entertaining • Comfortable, durable, polished",
-    description:
-      "A functional outdoor room built for gatherings—defined zones, comfortable circulation, and a planting edge that softens the architecture without feeling busy.",
-    highlights: [
-      "Terrace zoning",
-      "Privacy screening",
-      "Soft-edged planting borders",
-    ],
-    imageSrc: "/images/projects/outdoor-terrace.png",
-    imageAlt: "Outdoor living terrace with seating areas and refined planting",
-  },
-  {
-    title: "Backyard Garden Sanctuary",
-    subtitle: "Planting + Stewardship • A calm, natural feel",
-    description:
-      "A layered garden designed to mature beautifully—textures, heights, and seasonal rhythm that make the space feel intentional, peaceful, and lived-in.",
-    highlights: [
-      "Layered planting design",
-      "Soil + bed renovation",
-      "Long-term growth plan",
-    ],
-    imageSrc: "/images/projects/garden-sanctuary.png",
-    imageAlt: "Backyard garden sanctuary with layered planting and natural textures",
-  },
-  {
-    title: "Evergreen Privacy Screen",
-    subtitle: "Landscape Upgrade • Quiet, elegant separation",
-    description:
-      "A discreet privacy solution using structured evergreens and supportive understory planting—creating separation without looking like a fence.",
-    highlights: [
-      "Evergreen backbone",
-      "Understory texture",
-      "Wind + sightline control",
-    ],
-    imageSrc: "/images/projects/privacy-screen.png",
-    imageAlt: "Evergreen privacy screen using structured planting for separation",
-  },
-  {
-    title: "Maintenance Program: Premium Care",
-    subtitle: "Ongoing Service • Consistent, professional upkeep",
-    description:
-      "Weekly and seasonal care that protects your investment—pruning, cleanup, fertilization timing, and proactive plant health checks for a refined look year-round.",
-    highlights: [
-      "Seasonal pruning schedule",
-      "Detail-oriented cleanup",
-      "Plant health monitoring",
-    ],
-    imageSrc: "/images/projects/maintenance-premium-care.png",
-    imageAlt: "Premium garden maintenance with clean edges and healthy planting",
-  },
-  {
-    title: "Resin Bound Driveway Refresh (Wallden)",
-    subtitle: "Low Maintenance • Permeable grey resin-bound finish",
-    description:
-      "A practical, modern driveway upgrade using grey resin-bound surfacing with a red brick border for definition. Beige brick planters filled with white stone add a clean, decorative finish—ideal for homeowners who want a tidy look without constant upkeep.",
-    highlights: [
-      "Grey resin-bound (permeable drainage)",
-      "Red brick edging for crisp lines",
-      "White stone + pots: low maintenance",
-    ],
-    imageSrc: "/images/projects/resin-bound-wallden-manchester.png",
+    imageSrc: "/images/projects/project-01-indian-sandstone-01.png",
     imageAlt:
-      "Wallden Manchester home with grey resin-bound driveway, red brick border, beige brick planters with white stone and pots",
+      "Indian sandstone patio with curved layout and clean, durable finish in Garswood",
   },
   {
-    title: "Budget Slabs + Gravel Garden (Liverpool)",
-    subtitle: "Budget-Friendly • Fast transformation with minimal work",
+    title: "Brick Borders + Decorative Gravel (Wigan)",
+    subtitle: "Low maintenance • Clean structure • Better drainage",
     description:
-      "A simple, affordable garden refresh using yellow slabs set into clean white gravel. Long timber planters bring strong colour through mixed roses and vibrant spring blooms—perfect for a quick upgrade without a big spend.",
+      "Brick borders installed to define planting areas, finished with decorative gravel for a clean, low-maintenance garden layout. This project improves structure, drainage, and overall appearance while keeping the space practical and easy to maintain in Wigan.",
     highlights: [
-      "Yellow slabs set in white gravel",
-      "Timber planters for instant colour",
-      "Low-cost, easy-care layout",
+      "Brick edging to define planting zones",
+      "Decorative gravel for a tidy finish",
+      "Improved structure + drainage",
     ],
-    imageSrc: "/images/projects/low-cost-slabs-gravel-liverpool.png",
+    imageSrc: "/images/projects/project-02-brick-borders-gravel-01.png",
     imageAlt:
-      "Liverpool rectangular garden with yellow paving slabs set in white gravel and long timber planters with colorful flowers",
+      "Garden with brick borders defining planting areas and decorative gravel for a low maintenance finish in Wigan",
   },
   {
-    title: "Curved Pathway Garden (Low Maintenance)",
-    subtitle: "Quality Finish • Natural lawn with bright seasonal borders",
+    title: "Resin Bound Driveway (Wigan)",
+    subtitle: "Permeable finish • Clean lines • Low maintenance",
     description:
-      "A natural-lawn garden made easy: a gently curved path with grey 45×54 slabs, super-white gravel, and red brick edging for structure. Dense spring planting adds colour and impact while keeping the overall maintenance simple and predictable.",
+      "A durable resin bound driveway installed with proper base preparation for a smooth, permeable, and low-maintenance finish. Brick edging provides clean definition while enhancing the overall appearance of the property in Wigan.",
     highlights: [
-      "45×54 grey slabs with a soft curve",
-      "Super-white gravel for a clean look",
-      "Red brick edging + spring colour borders",
+      "Resin bound (permeable drainage)",
+      "Proper base preparation for longevity",
+      "Brick edging for crisp definition",
     ],
-    imageSrc: "/images/projects/natural-lawn-curved-path-spring.png",
+    imageSrc: "/images/projects/project-03-resin-bound-driveway-01.png",
     imageAlt:
-      "Natural lawn garden with a gently curved path using grey slabs, super white gravel, red brick edging, and abundant spring flowers",
+      "Resin bound driveway with brick edging, smooth permeable finish and clean definition in Wigan",
   },
-
+  {
+    title: "Artificial Lawn Installation (Wigan)",
+    subtitle: "28sqm • Clean edging • Practical, tidy finish",
+    description:
+      "A 28sqm artificial lawn installed with proper groundwork to ensure a level, durable, and low-maintenance finish. Finished with clean edging and decorative gravel borders, creating a tidy and practical garden space in Wigan.",
+    highlights: [
+      "Proper groundwork for a level base",
+      "Neat edging for a crisp outline",
+      "Decorative gravel borders for a clean look",
+    ],
+    imageSrc: "/images/projects/project-04-artificial-lawn-01.png",
+    imageAlt:
+      "Artificial lawn installation with clean edging and decorative gravel borders for a tidy low maintenance garden in Wigan",
+  },
+  {
+    title: "Grey Slab Patio (Warrington)",
+    subtitle: "Porcelain look • Modern finish • Low maintenance",
+    description:
+      "A clean, modern porcelain patio installed with full groundwork preparation to ensure a level, durable, and low-maintenance finish. This 9sqm project adds a practical seating area while giving the garden a sharp, contemporary look in Warrington.",
+    highlights: [
+      "Full groundwork preparation",
+      "Modern grey slab finish",
+      "Practical seating area with minimal upkeep",
+    ],
+    imageSrc: "/images/projects/project-05-grey-slabs-patio-01.png",
+    imageAlt:
+      "Modern grey slab patio with clean lines and low maintenance finish in Warrington",
+  },
+  {
+    title: "Concrete Slab Patio (15sqm)",
+    subtitle: "Solid base • Clean layout • Durable seating area",
+    description:
+      "A 15sqm concrete slab patio installed with full groundwork preparation to create a solid, level, and durable outdoor seating area. The clean layout provides a practical, low-maintenance finish that complements the garden and surrounding features.",
+    highlights: [
+      "Solid, level base with full groundwork",
+      "Durable concrete slab layout",
+      "Practical low-maintenance seating area",
+    ],
+    imageSrc: "/images/projects/project-06-grey-slabs-patio-01 - Copy.png",
+    imageAlt:
+      "Concrete slab patio with clean layout, solid groundwork preparation and durable low maintenance finish",
+  },
 ];
 
 export default function ProjectsPage() {
   return (
     <section>
       <div className="container" style={{ padding: "4rem 0" }}>
-        {/* Page Heading */}
-        <header style={{ maxWidth: 720, marginBottom: "3rem" }}>
-          <h1>Projects</h1>
-          <p style={{ marginTop: "1rem" }}>
-            Explore a selection of premium transformations—designed with restraint,
-            built with precision, and maintained for long-term beauty.
-          </p>
+        {/* Page Heading (now inside dark-green rounded panel) */}
+        <header style={{ width: "100%", marginBottom: "3rem" }}>
+          <div
+            style={{
+              background: "var(--color-primary)",
+              borderRadius: "18px",
+              padding: "1.9rem 2rem",
+              boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
+              width: "100%",
+            }}
+          >
 
-          {/* Quick conversion line */}
-          <p style={{ marginTop: "0.75rem" }}>
-            Want a similar outcome on your property?{" "}
-            <Link
-              href="/quote"
-              style={{ color: "var(--color-primary)", fontWeight: 700 }}
-            >
-              Request a quote
-            </Link>
-            .
-          </p>
+            <h1 style={{ margin: 0, color: "#F1E7D3" }}>Projects</h1>
+
+            <p style={{ marginTop: "0.9rem", color: "#F1E7D3", opacity: 0.92 }}>
+              Below are a few real transformations we’ve completed across the North West.
+              Each one is planned properly, built on solid groundwork, and finished cleanly—
+              so the space looks right now and stays strong season after season.
+            </p>
+
+            <p style={{ marginTop: "0.85rem", marginBottom: 0, color: "#F1E7D3" }}>
+              Want a similar outcome on your property?{" "}
+              <Link
+                href="/quote"
+                style={{
+                  color: "#F1E7D3",
+                  fontWeight: 800,
+                  textDecoration: "underline",
+                  textUnderlineOffset: "3px",
+                }}
+              >
+                Request a quote
+              </Link>
+              .
+            </p>
+          </div>
         </header>
 
         {/* Project Grid */}
