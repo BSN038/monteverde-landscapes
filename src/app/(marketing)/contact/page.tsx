@@ -69,18 +69,19 @@ export default function ContactPage() {
 
     setSubmitState({ status: "submitting" });
 
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+      source: "website",
+    };
+
     try {
-      // Keep payload minimal and predictable.
-      // If your /api/lead expects different keys, adjust here.
+      // 1) Persist to Supabase via your API
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          message: form.message.trim(),
-          source: "website",
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = (await res.json()) as { ok?: boolean; error?: string };
@@ -91,6 +92,22 @@ export default function ContactPage() {
           message: data.error || "Something went wrong. Please try again.",
         });
         return;
+      }
+
+      // 2) Notify via Formspree (non-blocking)
+      const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT;
+
+      if (endpoint) {
+        await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            ...payload,
+            page: "/contact",
+          }),
+        }).catch(() => {
+          // Ignore Formspree failures — Supabase is already saved
+        });
       }
 
       setSubmitState({ status: "success" });
@@ -135,7 +152,6 @@ export default function ContactPage() {
           </p>
         </div>
       </header>
-
 
       <section className="rounded-3xl border border-neutral-200 bg-white p-10 shadow-md">
         {submitState.status === "success" ? (

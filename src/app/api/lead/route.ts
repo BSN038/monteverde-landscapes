@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
 export async function POST(req: Request) {
@@ -21,17 +20,45 @@ export async function POST(req: Request) {
         : null;
 
     const email = isNonEmptyString(body.email) ? body.email.trim() : null;
-    const message = isNonEmptyString(body.message) ? body.message.trim() : null;
+
     const source = isNonEmptyString(body.source) ? body.source.trim() : "website";
 
-    if (!name || !email || !message) {
+    // message puede venir vacío en Quote (tu UI lo manda como undefined si está en blanco)
+    const rawMessage = typeof body.message === "string" ? body.message.trim() : "";
+    const message =
+      rawMessage.length > 0
+        ? rawMessage
+        : source === "quote"
+          ? "Quote request (no additional details provided)."
+          : null;
+
+    if (!name || !email) {
       return NextResponse.json(
         { ok: false, error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Guardar en DB (Supabase)
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid email" },
+        { status: 400 }
+      );
+    }
+
+    // En Contact sí exigimos message
+    if (!message) {
+      return NextResponse.json(
+        { ok: false, error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     const { error } = await supabase.from("leads").insert({
       name,
       email,
@@ -47,8 +74,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Éxito
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {
     console.error("Lead API error:", err);
     return NextResponse.json(

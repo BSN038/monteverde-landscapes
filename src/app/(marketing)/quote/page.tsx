@@ -13,13 +13,7 @@ type SubmitState =
   | { status: "success" }
   | { status: "error"; message: string };
 
-const SERVICES = [
-  "Landscape Design",
-  "Planting",
-  "Hardscaping",
-  "Maintenance",
-  "Other",
-] as const;
+const SERVICES = ["Landscape Design", "Planting", "Hardscaping", "Maintenance", "Other"] as const;
 
 const BUDGETS = ["< £1,000", "£1,000–£3,000", "£3,000–£7,500", "£7,500+", "Not sure"] as const;
 
@@ -86,21 +80,24 @@ export default function QuotePage() {
 
     setSubmitState({ status: "submitting" });
 
+    const payload: LeadCreateInput = {
+      ...form,
+      fullName: form.fullName.trim(),
+      email: form.email.trim(),
+      phone: form.phone?.trim() || undefined,
+      address: form.address?.trim() || undefined,
+      service: form.service?.trim() || undefined,
+      budget: form.budget?.trim() || undefined,
+      timeline: form.timeline?.trim() || undefined,
+      message: form.message?.trim() || undefined,
+    };
+
     try {
+      // 1) Persist to Supabase via your API
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          fullName: form.fullName.trim(),
-          email: form.email.trim(),
-          phone: form.phone?.trim() || undefined,
-          address: form.address?.trim() || undefined,
-          service: form.service?.trim() || undefined,
-          budget: form.budget?.trim() || undefined,
-          timeline: form.timeline?.trim() || undefined,
-          message: form.message?.trim() || undefined,
-        } satisfies LeadCreateInput),
+        body: JSON.stringify(payload satisfies LeadCreateInput),
       });
 
       const data = (await res.json()) as { ok?: boolean; error?: string };
@@ -111,6 +108,22 @@ export default function QuotePage() {
           message: data.error || "Something went wrong. Please try again.",
         });
         return;
+      }
+
+      // 2) Notify via Formspree (non-blocking)
+      const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_QUOTE_ENDPOINT;
+
+      if (endpoint) {
+        await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            ...payload,
+            page: "/quote",
+          }),
+        }).catch(() => {
+          // Ignore Formspree failures — Supabase is already saved
+        });
       }
 
       setSubmitState({ status: "success" });
@@ -319,9 +332,7 @@ export default function QuotePage() {
             </form>
           </>
         )}
-
       </div>
-
     </main>
   );
 }
@@ -372,9 +383,7 @@ function SuccessPanel() {
   return (
     <div className="mx-auto max-w-xl rounded-xl border border-green-200 bg-green-50 p-6 text-centerf">
       <h2 className="text-base font-semibold text-green-900">Request received</h2>
-      <p className="mt-1 text-sm text-green-800">
-        Thanks — we’ll get back to you shortly.
-      </p>
+      <p className="mt-1 text-sm text-green-800">Thanks — we’ll get back to you shortly.</p>
     </div>
   );
 }
