@@ -111,7 +111,8 @@ export default function QuotePage() {
       }
 
       // 2) Notify via Formspree (non-blocking)
-      const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_QUOTE_ENDPOINT;
+      const endpoint =
+        process.env.NEXT_PUBLIC_FORMSPREE_QUOTE_ENDPOINT ?? "https://formspree.io/f/mojjngpo";
 
       if (endpoint) {
         await fetch(endpoint, {

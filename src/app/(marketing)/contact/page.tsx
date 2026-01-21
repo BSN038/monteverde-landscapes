@@ -95,7 +95,8 @@ export default function ContactPage() {
       }
 
       // 2) Notify via Formspree (non-blocking)
-      const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT;
+      const endpoint =
+        process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT ?? "https://formspree.io/f/xjggenpo";
 
       if (endpoint) {
         await fetch(endpoint, {
