@@ -89,18 +89,19 @@ const PROJECTS: ProjectCard[] = [
       "Modern grey slab patio with clean lines and low maintenance finish in Warrington",
   },
   {
-    title: "Concrete Slab Patio (15sqm)",
-    subtitle: "Solid base • Clean layout • Durable seating area",
+    title: "Resin Bound Patio (Wigan)",
+    subtitle: "Low-maintenance finish • Clean look • Practical outdoor space",
     description:
-      "A 15sqm concrete slab patio installed with full groundwork preparation to create a solid, level, and durable outdoor seating area. The clean layout provides a practical, low-maintenance finish that complements the garden and surrounding features.",
+      "This residential project in Wigan involved a full outdoor upgrade, featuring a resin bound patio installed with proper ground preparation to create a clean, durable, and low-maintenance seating area. Additional works included fence painting, wall rendering for a smooth modern finish, and the installation of a new shed for practical storage.",
     highlights: [
-      "Solid, level base with full groundwork",
-      "Durable concrete slab layout",
-      "Practical low-maintenance seating area",
+      "Resin bound surface with full ground preparation",
+      "Painted and refreshed fencing",
+      "Rendered wall with clean, modern finish",
+      "New shed installation for added storage",
     ],
-    imageSrc: "/images/projects/project-06-grey-slabs-patio-01 - Copy.png",
+    imageSrc: "/images/projects/Resind-Patio-Wigan.png",
     imageAlt:
-      "Concrete slab patio with clean layout, solid groundwork preparation and durable low maintenance finish",
+      "Resin bound patio in Wigan with clean layout, painted fences, rendered wall and newly installed garden shed",
   },
 ];
 
