@@ -1,185 +1,243 @@
-# Monteverde Landscapes
+Monteverde Landscapes
 
-Website + internal dashboard for Monteverde Landscapes (marketing site, quote flow, and operational dashboard for leads/quotes/projects/reviews).
+Marketing website and internal data layer for Monteverde Landscapes, including lead capture, quote flow, contact forms, customer reviews, and project content.
 
-**Production (Vercel):** https://monteverde-landscapes.vercel.app  
-**Primary domain (planned):** monteverdelandscapers.com
+Production (Vercel):
+https://monteverde-landsccapes.vercel.app
 
----
+Primary domain:
+https://monteverdelandscapers.com
 
-## Overview
+Overview
 
 This repository contains:
 
-- **Marketing site** (high-trust brand pages, services, projects, reviews, contact).
-- **Quote flow** (`/quote`) built to reduce friction and increase conversions.
-- **Internal dashboard** (`/app/...`) for operational visibility (leads, quotes, projects, reviews, settings).
-- **API routes** for form submissions and backend operations.
-- **Supabase** as database + auth (server/client clients).
-- **Resend** for transactional email (lead/quote confirmations and internal notifications).
+Marketing website (Home, Services, Projects, Reviews, Contact).
 
----
+Quote flow (/quote) for structured price estimation.
 
-## Tech Stack
+Contact form (/contact) for general enquiries.
 
-- **Next.js (App Router)** + **TypeScript**
-- **Tailwind CSS**
-- **Supabase** (Postgres + API)
-- **Resend** (transactional email)
-- **Vercel** (hosting/deploy)
+Reviews system powered by Supabase with manual approval.
 
----
+Supabase as the database backend.
 
-## Project Structure
+Formspree for form submissions and email delivery.
 
-High-level tree:
+Vercel for deployment and hosting.
 
-- `src/app/(marketing)/...` → marketing pages (home, services, projects, quote, etc.)
-- `src/app/(dashboard)/app/...` → dashboard pages
-- `src/app/api/...` → Next.js API routes (`lead`, `quote`, `review`, `upload`)
-- `src/components/...` → UI components (forms, dashboard widgets, marketing sections)
-- `src/content/...` → content modules (services, projects, testimonials, FAQs)
-- `supabase/migrations` + `supabase/seed.sql` → DB setup
+Tech Stack
 
-Key public routes:
+Next.js (App Router)
 
-- `/` (Home)
-- `/about`
-- `/services`
-- `/process`
-- `/projects`
-- `/projects/[slug]`
-- `/reviews`
-- `/contact`
-- `/quote`
+TypeScript
 
-Key dashboard routes:
+Tailwind CSS
 
-- `/login`
-- `/app`
-- `/app/leads`
-- `/app/quotes`
-- `/app/projects`
-- `/app/reviews`
-- `/app/settings`
+Supabase (Postgres database)
 
-Note: `/app/calenda` exists and appears to be a typo for a calendar page.
+Formspree (Quote & Contact forms → email delivery)
 
----
+Vercel (production hosting)
 
-## Local Development
+Project Structure
 
-### Prerequisites
+High-level structure:
 
-- Node.js (LTS recommended)
-- npm
+src/
+├─ app/
+│  ├─ (marketing)/
+│  │  ├─ page.tsx          # Home
+│  │  ├─ services/
+│  │  ├─ projects/
+│  │  ├─ reviews/
+│  │  ├─ contact/
+│  │  └─ quote/
+│  ├─ api/
+│  │  └─ reviews/
+│  │     └─ route.ts       # Reviews API (Supabase)
+│  └─ layout.tsx
+├─ components/
+│  ├─ layout/
+│  │  ├─ Header.tsx
+│  │  └─ Footer.tsx
+│  ├─ forms/
+│  └─ ui/
+├─ content/
+│  ├─ projects.ts
+│  ├─ services.ts
+│  └─ reviews.ts
+└─ types/
 
-### Install
+Forms & Email Flow (IMPORTANT)
+Quote Form (/quote)
 
-```bash
+Provider: Formspree
+
+Endpoint: Configured directly in the Quote page
+
+What happens:
+
+User submits quote form
+
+Formspree receives submission
+
+Email is sent to info@monteverdelandscapers.com
+
+Submission is also visible in Formspree dashboard
+
+Success message shown on the website
+
+No backend email logic is used for quotes anymore.
+
+Contact Form (/contact)
+
+Provider: Formspree
+
+Purpose: General enquiries
+
+Flow: Same as Quote
+
+Emails go to: info@monteverdelandscapers.com
+
+Reviews System
+How Reviews Work
+
+Reviews are stored in Supabase
+
+Table: reviews
+
+Key fields:
+
+full_name
+
+email
+
+rating
+
+message
+
+status (pending | approved)
+
+created_at
+
+Approval Process (Manual)
+
+User submits a review on the website
+
+Review is saved in Supabase with:
+
+status = 'pending'
+
+
+Admin opens Supabase Dashboard
+
+Go to:
+
+Table Editor → reviews
+
+
+Change:
+
+status: pending → approved
+
+
+Only approved reviews appear on the website
+
+✅ This gives full control and prevents spam or fake reviews.
+
+Supabase Usage
+
+Supabase is used only as a database (no public auth yet).
+
+Tables in use:
+
+reviews
+
+leads (historical / internal)
+
+Supabase access:
+
+Managed via Supabase Dashboard (web UI)
+
+Production project is already configured
+
+Footer & Contact Info
+
+The footer includes:
+
+Company copyright
+
+Phone number
+
+Email address
+
+Social media icons:
+
+Facebook
+
+Instagram
+
+Google (brand presence)
+
+Nextdoor
+
+Icons are rendered via React Icons and controlled in:
+
+src/components/layout/Footer.tsx
+
+Local Development
+Install
 npm install
+
+Run locally
+npm run dev
+
+
+App runs at:
+
+http://localhost:3000
 
 Environment Variables
 
-This project requires Supabase configuration for both client and server.
+Only Supabase is required:
 
-Create a .env.local (or use the template if available) and set:
-
-Required
-# Used by server-side code (API routes, secure DB access)
-SUPABASE_URL=...
-
-# Server-side secret (DO NOT expose to client)
+NEXT_PUBLIC_SUPABASE_URL=...
 SUPABASE_SERVICE_ROLE_KEY=...
 
-# Used by client-side code (browser)
-NEXT_PUBLIC_SUPABASE_URL=...
 
-
-IMPORTANT:
-
-SUPABASE_SERVICE_ROLE_KEY must never be exposed publicly.
-
-On Vercel, these must be configured under Project → Settings → Environment Variables.
+⚠️ Never expose SUPABASE_SERVICE_ROLE_KEY to the client.
 
 Deployment (Vercel)
 
-This repo is deployed to Vercel.
+Automatic deploy on push to master
 
-The production URL is available at:
+Production environment is active
 
-https://monteverde-landscapes.vercel.app
+Domain can be managed in Vercel settings
 
-Common deployment issue
+Workflow Rules (IMPORTANT)
 
-If Vercel build fails related to Supabase config, confirm the environment variables exist in All Environments (Production/Preview/Development) and are spelled exactly as above.
+One change at a time
 
-Email (Resend) — DNS Requirements
+Always:
 
-Resend is used for outbound transactional emails. Domain verification is done via DNS records in Namecheap.
-
-Current state (expected)
-
-DKIM should be Verified
-
-SPF must be Verified for deliverability
-
-Important SPF rule
-
-You must have a single SPF record at the root host (@). Multiple SPF records cause verification failure.
-
-Example SPF value used for Resend (Amazon SES):
-
-v=spf1 include:amazonses.com ~all
+Visual check → Commit → Push → Vercel deploy
 
 
-DNS propagation can take time. Use Resend’s “Restart” button to re-check after updates.
+Avoid mixing:
 
-What Has Been Implemented
+UI changes
 
-Marketing site pages and layouts
+Backend changes
 
-Quote page + Quote Wizard component
+Always confirm:
 
-Dashboard skeleton + core pages
+Form submission
 
-API routes for lead/quote/review/upload
+Email delivery
 
-Supabase integration (server + client)
-
-Production deploy on Vercel
-
-Environment variable alignment for Supabase on Vercel
-
-What Remains
-
-Confirm Resend SPF final status becomes Verified
-
-Run an end-to-end test:
-
-submit quote form
-
-verify DB insert in Supabase
-
-verify transactional emails (internal + user)
-
-Optional: connect custom domain (monteverdelandscapers.com) to Vercel
-
-UI polish for /quote success state + CTA consistency across the site
-
-Workflow Rules (Project Discipline)
-
-One instruction/change at a time
-
-Prefer small, reversible changes
-
-Keep UI changes separate from backend changes
-
-Validate visually after each step
-
-DNS changes require propagation time; avoid repeated edits
-
-Keep conversion links consistent: primary CTA should point to /quote
+Supabase records
 
 Git Workflow
 git status
@@ -187,6 +245,19 @@ git add -A
 git commit -m "Describe the change"
 git push
 
-License / Ownership
+Roadmap / Next Improvements
+
+Product color selector (resin, paving, flags, Indian stone)
+
+Gallery filtering by material
+
+Admin dashboard (optional)
+
+SEO structured data for reviews
+
+Google Reviews integration
+
+Ownership
 
 Internal project for Monteverde Landscapes.
+All rights reserved.
