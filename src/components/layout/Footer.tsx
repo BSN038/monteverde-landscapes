@@ -54,6 +54,16 @@ function IconGoogle(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+function IconPhone(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" {...props}>
+      <path
+        fill="currentColor"
+        d="M6.6 2.8c.6-.6 1.5-.6 2.1 0l2.2 2.2c.6.6.6 1.5 0 2.1l-1.2 1.2c-.2.2-.3.6-.2.9.7 2 2.6 3.9 4.6 4.6.3.1.7 0 .9-.2l1.2-1.2c.6-.6 1.5-.6 2.1 0l2.2 2.2c.6.6.6 1.5 0 2.1l-1.1 1.1c-1 1-2.5 1.4-3.9 1.1-6.1-1.4-10.9-6.2-12.3-12.3-.3-1.4.1-2.9 1.1-3.9l1.1-1.1z"
+      />
+    </svg>
+  );
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -78,7 +88,7 @@ export default function Footer() {
     },
     {
       name: "Nextdoor",
-      href: " https://nextdoor.co.uk/p/B4ZmPy9HYZQ9?utm_source=share&extras=MTc1OTIyMzk2ODg0NTA%3D&share_platform=10&utm_campaign=1769009645052&share_action_id=f97ea36c-9392-4fc2-89aa-57a98eee3934",
+      href: "https://nextdoor.co.uk/p/B4ZmPy9HYZQ9?utm_source=share&extras=MTc1OTIyMzk2ODg0NTA%3D&share_platform=10&utm_campaign=1769009645052&share_action_id=f97ea36c-9392-4fc2-89aa-57a98eee3934",
       Icon: IconNextdoor,
     },
     {
@@ -86,6 +96,7 @@ export default function Footer() {
       href: "#",
       Icon: IconGoogle,
     },
+    
   ] as const;
 
   const linkStyle: React.CSSProperties = {
@@ -134,7 +145,7 @@ export default function Footer() {
           {/* Contact */}
           <div style={{ display: "grid", gap: "0.35rem", fontSize: "0.875rem" }}>
             <a href={phoneHref} style={linkStyle} aria-label={`Call ${phoneDisplay}`}>
-              <span style={{ opacity: 0.9 }}>Phone:</span>
+              <IconPhone style={{ opacity: 0.9 }} />
               <span>{phoneDisplay}</span>
             </a>
 
